@@ -31,29 +31,36 @@ const auth = new google.auth.GoogleAuth({
 
 const drive = google.drive({ version: 'v3', auth });
 
-
-
-app.use(cors());
+// Configure CORS to allow your frontend
+app.use(cors({
+  origin: '*', // Allow all origins for testing; restrict in production
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Upload endpoint
 app.post('/', upload.single('file'), async (req, res) => {
-  // console.log('Upload request received');
-
-  // console.log('Request body:', req.body);
+  console.log('Upload request received');
+  console.log('File present:', !!req.file);
+  console.log('File details:', req.file ? { 
+    name: req.file.originalname, 
+    size: req.file.size,
+    mimetype: req.file.mimetype 
+  } : 'No file');
   
   if (!req.file) {
-    // console.log('No file in request');
+    console.log('No file in request');
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
   if (!process.env.GOOGLE_DRIVE_FOLDER_ID) {
-    // console.error('Google Drive folder ID not configured');
+    console.error('Google Drive folder ID not configured');
     return res.status(500).json({ message: 'Server configuration error: Folder ID missing' });
   }
 
   try {
-    // console.log('Preparing file upload:', req.file.originalname);
+    console.log('Preparing file upload:', req.file.originalname);
 
     const fileMetadata = {
       name: req.file.originalname,
@@ -71,7 +78,7 @@ app.post('/', upload.single('file'), async (req, res) => {
       fields: 'id, webViewLink',
     });
 
-    // console.log('File uploaded successfully:', response.data);
+    console.log('File uploaded successfully:', response.data);
 
     res.status(200).json({
       message: 'File uploaded successfully',
@@ -80,6 +87,7 @@ app.post('/', upload.single('file'), async (req, res) => {
     });
   } catch (error) {
     console.error('Error uploading file:', error);
+    console.error('Error details:', error.message);
     res.status(500).json({ 
       message: 'Error uploading file', 
       error: error.message,
