@@ -39,6 +39,18 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Root endpoint - Server status
+app.get('/', (req, res) => {
+  res.json({
+    message: '🚀 NoteNest Backend Server is running!',
+    status: 'active',
+    endpoints: {
+      upload: 'POST / (with file)',
+      health: 'GET /health'
+    }
+  });
+});
+
 // Upload endpoint
 app.post('/', upload.single('file'), async (req, res) => {
   console.log('Upload request received');
