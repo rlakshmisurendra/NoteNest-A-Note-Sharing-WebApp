@@ -1,18 +1,18 @@
 {
   "name": "notenest-server",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
+  "main": "uploadserv.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node uploadserv.js",
+    "dev": "nodemon uploadserv.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.7.7",  
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
